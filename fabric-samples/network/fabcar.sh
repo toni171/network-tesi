@@ -24,6 +24,10 @@ function changeCarOwner() {
     docker exec cli peer chaincode invoke -n fabcar -C mychannel -o ${ORDERER_HOSTNAME}:${ORDERER_PORT} --tls --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/${ORDERER_HOSTNAME}/msp/tlscacerts/tlsca.example.com-cert.pem --peerAddresses peer0.org2.example.com:9051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt --peerAddresses peer0.org1.example.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt -c "$comando"
 }
 
+function init() {
+    docker exec cli peer chaincode invoke -o ${ORDERER_HOSTNAME}:${ORDERER_PORT} --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/${ORDERER_HOSTNAME}/msp/tlscacerts/tlsca.example.com-cert.pem -C mychannel -n fabcar --peerAddresses peer0.org1.example.com:7051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt --peerAddresses peer0.org2.example.com:9051 --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt -c '{"Args":["initLedger"]}'
+}
+
 MODE=$1
 
 if [ "${MODE}" == "createCar" ]; then
@@ -34,4 +38,6 @@ elif [ "${MODE}" == "queryAllCars" ]; then
     queryAllCars
 elif [ "${MODE}" == "changeCarOwner" ]; then
     changeCarOwner
+elif [ "${MODE}" == "init" ]; then
+    init
 fi
