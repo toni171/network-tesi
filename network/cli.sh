@@ -50,10 +50,10 @@ function hostStop () {
 }
 
 function hostResume () {
-    docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp -e CORE_PEER_ADDRESS=peer0.org3.example.com:11051 -e CORE_PEER_LOCALMSPID="Org3MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt cli peer channel join -b mychannel.block
-    docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp -e CORE_PEER_ADDRESS=peer1.org3.example.com:12051 -e CORE_PEER_LOCALMSPID="Org3MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.example.com/peers/peer1.org3.example.com/tls/ca.crt cli peer channel join -b mychannel.block
-    docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp -e CORE_PEER_ADDRESS=peer0.org3.example.com:11051 -e CORE_PEER_LOCALMSPID="Org3MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt cli peer lifecycle chaincode install fabcar.tar.gz
-    docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp -e CORE_PEER_ADDRESS=peer1.org3.example.com:12051 -e CORE_PEER_LOCALMSPID="Org3MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.example.com/peers/peer1.org3.example.com/tls/ca.crt cli peer lifecycle chaincode install fabcar.tar.gz
+    docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org${WHICH}.example.com/users/Admin@org${WHICH}.example.com/msp -e CORE_PEER_ADDRESS=peer0.org${WHICH}.example.com:${PEER_PORT_1} -e CORE_PEER_LOCALMSPID="Org${WHICH}MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org${WHICH}.example.com/peers/peer0.org${WHICH}.example.com/tls/ca.crt cli peer channel join -b mychannel.block
+    docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org${WHICH}.example.com/users/Admin@org${WHICH}.example.com/msp -e CORE_PEER_ADDRESS=peer1.org${WHICH}.example.com:${PEER_PORT_2} -e CORE_PEER_LOCALMSPID="Org${WHICH}MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org${WHICH}.example.com/peers/peer1.org${WHICH}.example.com/tls/ca.crt cli peer channel join -b mychannel.block
+    docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org${WHICH}.example.com/users/Admin@org${WHICH}.example.com/msp -e CORE_PEER_ADDRESS=peer0.org${WHICH}.example.com:${PEER_PORT_1} -e CORE_PEER_LOCALMSPID="Org${WHICH}MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org${WHICH}.example.com/peers/peer0.org${WHICH}.example.com/tls/ca.crt cli peer lifecycle chaincode install fabcar.tar.gz
+    docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org${WHICH}.example.com/users/Admin@org${WHICH}.example.com/msp -e CORE_PEER_ADDRESS=peer1.org${WHICH}.example.com:${PEER_PORT_2} -e CORE_PEER_LOCALMSPID="Org${WHICH}MSP" -e CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org${WHICH}.example.com/peers/peer1.org${WHICH}.example.com/tls/ca.crt cli peer lifecycle chaincode install fabcar.tar.gz
 }
 
 MODE=$1
@@ -63,12 +63,18 @@ FILE_NAME="host${WHICH}.yaml"
 if [ "${WHICH}" == "1" ]; then
     ORDERER_HOSTNAME="orderer1.example.com"
     ORDERER_PORT="7050"
+    PEER_PORT_1="7051"
+    PEER_PORT_2="8051"
 elif [ "${WHICH}" == "2" ]; then
     ORDERER_HOSTNAME="orderer3.example.com"
     ORDERER_PORT="9050"
+    PEER_PORT_1="9051"
+    PEER_PORT_2="10051"
 elif [ "${WHICH}" == "3" ]; then
     ORDERER_HOSTNAME="orderer5.example.com"
     ORDERER_PORT="11050"
+    PEER_PORT_1="11051"
+    PEER_PORT_2="12051"
 fi
 
 if [ "${MODE}" == "hostup" ]; then

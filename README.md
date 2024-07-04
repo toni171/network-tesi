@@ -11,7 +11,7 @@ $ git clone https://github.com/toni171/network-tesi
 
 ## Creazione dell'overlay network
 
-Crea un overlay network che metta in comunicazione i due host
+Crea un overlay network che metta in comunicazione i tre host
 
 Sul primo host
 ```
@@ -19,7 +19,7 @@ $ docker swarm init --advertise-addr <indirizzo ip del primo host>
 $ docker swarm join-token manager
 ```
 
-Sul secondo host
+Sul secondo e sul terzo host
 ```
 $ <output del comando join-token manager> --advertise-addr <indirizzo ip del secondo host>
 ```
@@ -31,7 +31,7 @@ $ docker network create --attachable --driver overlay first-network
 
 ## Avvio degli host
 
-Su entrambi gli host accedere alla cartella `network-tesi/fabric-samples/network` e avviare gli host con il file `cli.sh`
+Sugli host accedere alla cartella `network-tesi/fabric-samples/network` e avviare gli host con il file `cli.sh`
 
 Sul primo host
 ```
@@ -41,6 +41,11 @@ $ . ./cli.sh hostup 1
 Sul secondo host
 ```
 $ . ./cli.sh hostup 2
+```
+
+Sul terzo host
+```
+$ . ./cli.sh hostup 3
 ```
 
 ## Avvio della rete
@@ -65,11 +70,6 @@ $ . ./cli.sh deployCC <packageID>
 
 ## Invocazione smart contract
 
-Per inizializzare il ledger si usa si usa il file `fabcar.sh`
-```
-$ . ./fabcar.sh init
-```
-
 Per invocare gli smart contract si usa il file `fabcar.sh`
 ```
 $ . ./fabcar.sh createCar
@@ -81,7 +81,25 @@ $ . ./fabcar.sh queryAllCars
 $ . ./fabcar.sh changeCarOwner
 ```
 
-## Disattivare gli host
+## Spegenere (temporaneamente) un host
+
+Per spegnere i peer e gli orderer su un host si usa `cli.sh`
+```
+$ . ./cli.sh hoststop <numero dell'host da cui si avvia il comando>
+```
+
+A differenza del comando `hostdown`, con `hoststop` non si vanno a spegnere i container del chaincode, consentendo si non doverlo reinstallare una volta fatto ripartire l'host.
+
+## Riaggiungere alla rete
+
+Per far ripartire un host spento con `hoststop`, prima dal terminale dell'host si inserisce `hostup` e poi sul terminale del primo host si digita 
+```
+$ . ./cli.sh hostresume <numero dell'host da aggiungere>
+```
+
+A differenza del comando `hostdown`, con `hoststop` non si vanno a spegnere i container del chaincode, consentendo si non doverlo reinstallare una volta fatto ripartire l'host.
+
+## Spegnere gli host
 
 Per spegnere i servizi sugli host si usa `cli.sh`
 ```
